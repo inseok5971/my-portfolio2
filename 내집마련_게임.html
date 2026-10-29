@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>내 집 마련 시뮬레이션 - 월급 250만원의 기적</title>
+    <!-- Google Fonts: Jua (캐주얼 카툰 게임 폰트) & Pretendard -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&family=Pretendard:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 배경 파티클 & 오버레이 효과 캔버스 -->
+    <canvas id="fxCanvas"></canvas>
+
+    <div class="app-layout">
+        <!-- 1. 상단 글로벌 네비게이션 헤더 -->
+        <header class="game-header">
+            <div class="header-brand">
+                <div class="brand-logo">🏠</div>
+                <div class="brand-text">
+                    <h1 class="brand-title">내 집 마련 시뮬레이션</h1>
+                    <span class="brand-subtitle">월급 250만원 ➔ 3억 자가 마련 대작전</span>
+                </div>
+            </div>
+
+            <div class="header-center">
+                <div id="dateBadge" class="game-clock-badge">
+                    <span class="clock-icon">🗓️</span>
+                    <span id="dateText">1월</span>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <button id="btnSound" class="control-btn" title="소리 켜기/끄기">
+                    <span class="btn-icon-text">🔊</span>
+                    <span class="btn-label">사운드</span>
+                </button>
+                <button id="btnHelp" class="control-btn" title="게임 가이드">
+                    <span class="btn-icon-text">📖</span>
+                    <span class="btn-label">가이드</span>
+                </button>
+                <button id="btnReset" class="control-btn danger" title="처음부터 다시하기">
+                    <span class="btn-icon-text">🔄</span>
+                    <span class="btn-label">리셋</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- 2. 메인 대시보드 그리드 (좌측: 사이드바 대시보드 / 우측: 메인 게임 아레나) -->
+        <div class="game-main-content">
+            
+            <!-- [좌측 사이드바] 플레이어 상태 & 주거 & 재무 센터 -->
+            <aside class="dashboard-sidebar">
+                
+                <!-- 캐릭터 & 직급 프로필 카드 -->
+                <div class="profile-card modern-card">
+                    <div class="profile-avatar-row">
+                        <div class="avatar-frame">
+                            <div id="profileAvatar" class="avatar-portrait">
+                                <svg viewBox="0 0 60 60" width="100%" height="100%">
+                                    <!-- Soft sky circle background -->
+                                    <circle cx="30" cy="30" r="28" fill="#e0f2fe" stroke="#38bdf8" stroke-width="2.5"/>
+                                    <!-- White shirt with round shoulders -->
+                                    <path d="M 10 56 C 13 41 47 41 50 56 Z" fill="#ffffff" stroke="#1e293b" stroke-width="2.2"/>
+                                    <path d="M 22 43 C 26 48 34 48 38 43 Z" fill="#dbeafe"/>
+                                    <!-- Ears -->
+                                    <circle cx="14" cy="30" r="4" fill="#fed7aa" stroke="#1e293b" stroke-width="1.8"/>
+                                    <circle cx="46" cy="30" r="4" fill="#fed7aa" stroke="#1e293b" stroke-width="1.8"/>
+                                    <!-- Face -->
+                                    <circle cx="30" cy="28" r="16" fill="#fed7aa" stroke="#1e293b" stroke-width="2.2"/>
+                                    <!-- Blushing cheeks -->
+                                    <ellipse cx="20" cy="33" rx="4" ry="2.2" fill="#ff8da1" opacity="0.85"/>
+                                    <ellipse cx="40" cy="33" rx="4" ry="2.2" fill="#ff8da1" opacity="0.85"/>
+                                    <!-- Eyes -->
+                                    <circle cx="23" cy="27.5" r="2.8" fill="#1e293b"/>
+                                    <circle cx="24.2" cy="26.3" r="1.1" fill="#ffffff"/>
+                                    <circle cx="37" cy="27.5" r="2.8" fill="#1e293b"/>
+                                    <circle cx="38.2" cy="26.3" r="1.1" fill="#ffffff"/>
+                                    <!-- Round Glasses from Pinterest Ref -->
+                                    <circle cx="23" cy="27.5" r="6.2" fill="none" stroke="#0f172a" stroke-width="2.4"/>
+                                    <circle cx="37" cy="27.5" r="6.2" fill="none" stroke="#0f172a" stroke-width="2.4"/>
+                                    <line x1="29.2" y1="27.5" x2="30.8" y2="27.5" stroke="#0f172a" stroke-width="2.4"/>
+                                    <line x1="20" y1="23.5" x2="22" y2="22.5" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round"/>
+                                    <line x1="34" y1="23.5" x2="36" y2="22.5" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round"/>
+                                    <!-- Smile -->
+                                    <path d="M 27 34 Q 30 37.5 33 34" stroke="#e11d48" stroke-width="2" fill="none" stroke-linecap="round"/>
+                                    <!-- Dark Teal/Navy Hair with top cowlick tuft like Pinterest -->
+                                    <path d="M 14 26 C 13 13 47 13 46 26 C 46 19 42 15 38 14 C 33 13 31 9 27 7 C 28 10 26 12 24 14 C 19 15 15 19 14 26 Z" fill="#1e293b"/>
+                                    <path d="M 27 7 C 25 3 32 2 34 6 C 31 7 29 7 27 7 Z" fill="#1e293b"/>
+                                    <path d="M 15 22 C 19 22 22 17 25 20 C 28 17 33 20 37 19 C 41 21 44 19 45 22 C 42 17 37 16 30 16 C 23 16 18 18 15 22 Z" fill="#1e293b"/>
+                                </svg>
+                            </div>
+                            <span id="jobRankLevel" class="rank-stars">★</span>
+                        </div>
+                        <div class="profile-details">
+                            <div class="job-meta">
+                                <span id="jobBadge" class="job-badge">사원 💻</span>
+                                
+                            </div>
+                            <div class="salary-display">
+                                <span class="salary-label">월 실수령액</span>
+                                <span id="salaryText" class="salary-amount">월 250만원</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 현재 주거 비주얼 일러스트 카드 -->
+                <div class="housing-visual-card modern-card">
+                    <div class="housing-card-header">
+                        <span class="badge-sub">현재 거주지</span>
+                        <span id="housingBadge" class="housing-tag">🚪 월세 원룸</span>
+                    </div>
+                    <div id="housingGraphic" class="housing-graphic-container">
+                        <!-- 동적으로 SVG 또는 일러스트 렌더링 -->
+                    </div>
+                    <div class="housing-meta-info">
+                        <span id="housingCostLabel">월세: <b>70만원</b> (고정 지출)</span>
+                    </div>
+                </div>
+
+                <!-- 자산 3분할 & 3억원 내 집 마련 진행도 -->
+                <div class="finance-card modern-card">
+                    <div class="finance-header">
+                        <span class="section-title">💰 자산 포트폴리오</span>
+                        <strong id="totalAssetVal" class="total-asset-text">500만원</strong>
+                    </div>
+
+                    <div class="asset-chips-grid">
+                        <div class="asset-chip cash">
+                            <div class="chip-top">
+                                <span>💵 현금</span>
+                            </div>
+                            <strong id="cashVal" class="chip-val">500만</strong>
+                        </div>
+                        <div class="asset-chip savings">
+                            <div class="chip-top">
+                                <span>🏦 적금 (연 4%)</span>
+                            </div>
+                            <strong id="savingsVal" class="chip-val">0만</strong>
+                        </div>
+                        <div class="asset-chip stocks">
+                            <div class="chip-top">
+                                <span>📈 주식/코인</span>
+                            </div>
+                            <strong id="stocksVal" class="chip-val">0만</strong>
+                        </div>
+                    </div>
+
+                    <!-- 3억 내 집 마련 프로그레스 트랙 -->
+                    <div class="goal-milestone-box">
+                        <div class="milestone-top">
+                            <span class="goal-label">🏰 내 집 마련 목표 (3억원)</span>
+                            <span id="goalPercent" class="goal-pct">1.7%</span>
+                        </div>
+                        <div class="milestone-track">
+                            <div id="goalProgressBar" class="milestone-bar" style="width: 1.7%;">
+                                <span class="bar-glow"></span>
+                            </div>
+                        </div>
+                        <div class="milestone-steps">
+                            <span id="node1" class="m-node">1단계: 보증금 (3천만)</span>
+                            <span id="node2" class="m-node">2단계: 전세 (1.5억)</span>
+                            <span id="node3" class="m-node">3단계: 내 집 (3억)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3대 스탯 게이지 (멘탈, 성과, 평판) -->
+                <div class="vitals-card modern-card">
+                    <span class="section-title">📊 라이프 3대 지표</span>
+                    
+                    <div class="vitals-list">
+                        <!-- 멘탈 게이지 -->
+                        <div id="mentalBox" class="vital-item">
+                            <div class="vital-header">
+                                <span class="vital-name">🧠 멘탈 (에너지)</span>
+                                <strong id="mentalVal" class="vital-val">85 / 100</strong>
+                            </div>
+                            <div class="vital-track">
+                                <div id="mentalBar" class="vital-fill fill-mental" style="width: 85%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- 성과 점수 -->
+                        <div class="vital-item">
+                            <div class="vital-header">
+                                <span class="vital-name">📈 분기 성과 점수</span>
+                                <strong id="perfVal" class="vital-val">20 / 100</strong>
+                            </div>
+                            <div class="vital-track">
+                                <div id="perfBar" class="vital-fill fill-perf" style="width: 20%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- 평판 점수 -->
+                        <div class="vital-item">
+                            <div class="vital-header">
+                                <span class="vital-name">🤝 사내 동료 평판</span>
+                                <strong id="repVal" class="vital-val">50 / 100</strong>
+                            </div>
+                            <div class="vital-track">
+                                <div id="repBar" class="vital-fill fill-rep" style="width: 50%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </aside>
+
+            <!-- [우측 메인 아레나] 8단계 턴 진행 & 인터랙티브 액션 카드 -->
+            <section class="game-play-area">
+                
+                <!-- 8단계 턴 인디케이터 (상단 네비게이션) -->
+                <nav class="phase-stepper-container modern-card">
+                    <div class="phase-stepper" id="phaseStepper">
+                        <div class="step-pill active" data-phase="1">
+                            <span class="step-num">1</span>
+                            <span class="step-name">월급 입금</span>
+                        </div>
+                        <div class="step-pill" data-phase="2">
+                            <span class="step-num">2</span>
+                            <span class="step-name">방어 & 득템</span>
+                        </div>
+                        <div class="step-pill" data-phase="3">
+                            <span class="step-num">3</span>
+                            <span class="step-name">고정 지출</span>
+                        </div>
+                        <div class="step-pill" data-phase="4">
+                            <span class="step-num">4</span>
+                            <span class="step-name">커리어 선택</span>
+                        </div>
+                        <div class="step-pill" data-phase="5">
+                            <span class="step-num">5</span>
+                            <span class="step-name">자금 배분</span>
+                        </div>
+                        <div class="step-pill" data-phase="6">
+                            <span class="step-num">6</span>
+                            <span class="step-name">주식 공격</span>
+                        </div>
+                        <div class="step-pill" data-phase="7">
+                            <span class="step-num">7</span>
+                            <span class="step-name">월말 이벤트</span>
+                        </div>
+                        <div class="step-pill" data-phase="8">
+                            <span class="step-num">8</span>
+                            <span class="step-name">정산 및 목표</span>
+                        </div>
+                    </div>
+                </nav>
+
+                <!-- 메인 인터랙티브 플레이 액션 카드 -->
+                <main id="actionCard" class="action-card modern-card">
+                    <!-- 자바스크립트가 화면을 채웁니다 -->
+                </main>
+
+            </section>
+        </div>
+    </div>
+
+    <!-- 엔딩 축하 & 성적표 모달 -->
+    <div id="endingModal" class="modal-backdrop" style="display: none;">
+        <div class="ending-dialog modern-card">
+            <span id="endingBadge" class="ending-badge-pill">🎉 내 집 마련 성공!</span>
+            <div id="endingIcon" class="ending-hero-icon">🏰</div>
+            <h2 id="endingTitle" class="ending-headline">커리어 성공 엔딩</h2>
+            <div id="endingStory" class="ending-story-box">
+                기획서의 4대 엔딩 스토리가 여기에 출력됩니다.
+            </div>
+            
+            <div class="ending-stats-grid">
+                <div class="stat-box">
+                    <span class="stat-name">소요 시간</span>
+                    <strong id="statMonths" class="stat-number">48개월 (4년)</strong>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-name">최종 직급</span>
+                    <strong id="statJob" class="stat-number">차장 (월 420만)</strong>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-name">최종 순자산</span>
+                    <strong id="statAssets" class="stat-number">3억 1,200만원</strong>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-name">남은 멘탈</span>
+                    <strong id="statMental" class="stat-number">78 / 100</strong>
+                </div>
+            </div>
+
+            <button id="btnRestartGame" class="game-btn btn-primary-large" style="width: 100%; margin-top: 8px;">
+                🔄 새로운 인생 도전하기
+            </button>
+        </div>
+    </div>
+
+    <!-- 도움말 가이드 모달 -->
+    <div id="helpModal" class="modal-backdrop" style="display: none;">
+        <div class="guide-dialog modern-card">
+            <div class="dialog-header">
+                <h3 class="dialog-title">📖 내 집 마련 게임 완벽 가이드</h3>
+                <button id="btnCloseHelp" class="close-x-btn">✕</button>
+            </div>
+            <div class="guide-scrollable-body">
+                <div class="guide-item">
+                    <h4>💵 월급 250만원 기준 재설계</h4>
+                    <p>월급 250만원에서 고정지출 약 150만원을 빼면 자유 자금은 약 100만원입니다. 세금 딱지 한 번과 충동구매 한 번이 뼈아프게 체감되는 현실적 구조입니다.</p>
+                </div>
+                <div class="guide-item">
+                    <h4>🏠 집 목표 3단계 로드맵</h4>
+                    <ul>
+                        <li><b>1단계: 월세 보증금 (3,000만원)</b> ➔ 역세권 오피스텔 이사 (월세 70만 ➔ 50만으로 절감)</li>
+                        <li><b>2단계: 전세 (1억 5,000만원)</b> ➔ 24평 전세 아파트 입주 (월세 지출 <b>0원</b> 달성!)</li>
+                        <li><b>3단계: 내 집 (3억원 이상)</b> ➔ 도달 시 최종 목표 클리어 및 4대 멀티 엔딩!</li>
+                    </ul>
+                </div>
+                <div class="guide-item">
+                    <h4>💼 승진 & 연봉 협상 시스템</h4>
+                    <p><b>사원(250만) ➔ 대리(300만) ➔ 과장(360만) ➔ 차장(420만) ➔ 부장(500만)</b><br>
+                    매달 야근을 하면 성과 점수가 급상승하지만 멘탈이 깎이고 투자 집중력이 흐려집니다. 분기마다 성과가 우수하면 김부장과의 1:1 대화형 연봉 협상과 승진 심사가 열립니다!</p>
+                </div>
+                <div class="guide-item">
+                    <h4>🏃 방어 라운드 (세금 딱지 피하기)</h4>
+                    <p>하늘에서 쏟아지는 건보료, 지방세, 과태료 고지서를 피하세요. 소득이 높아질수록 세금 딱지의 속도와 난이도가 상승합니다! 🛡️ 절세 쉴드와 💰 환급 보너스를 노려보세요.</p>
+                </div>
+                <div class="guide-item">
+                    <h4>📈 공격 라운드 (오르는 주식에 올라타기)</h4>
+                    <p>실시간 틱 차트에서 급등하는 타이밍을 노려 [지금 매수] ➔ 최고점에서 [지금 매도]로 익절하세요!</p>
+                </div>
+                <div class="guide-item">
+                    <h4>🏆 4대 멀티 엔딩</h4>
+                    <p>
+                        1. <b>커리어 엔딩</b>: 승진 중심의 탄탄한 월급으로 내 집 마련<br>
+                        2. <b>투자 엔딩</b>: 슈퍼개미의 반란! 투자 대박으로 파이어족 달성<br>
+                        3. <b>갓생 밸런스 엔딩</b>: 일과 투자, 멘탈(60+)까지 모두 챙긴 최고 난이도 엔딩<br>
+                        4. <b>번아웃 엔딩</b>: 집은 샀지만 건강과 인간관계를 잃은 씁쓸한 엔딩
+                    </p>
+                </div>
+            </div>
+            <button id="btnCloseHelpBottom" class="game-btn btn-secondary-modern" style="width: 100%; margin-top: 14px;">
+                이해했습니다, 게임으로 돌아가기
+            </button>
+        </div>
+    </div>
+
+    <!-- 사운드 및 게임 스크립트 -->
+    <script src="sound.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>

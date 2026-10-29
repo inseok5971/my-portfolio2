@@ -1,0 +1,1510 @@
+/* ========================================================
+   내 집 마련 시뮬레이션: Cozy Cartoon Platformer Edition CSS
+   핀터레스트 레퍼런스 스타일 (하늘, 절벽, 잔디, GOAL 팻말, 귀여운 안경 소년)
+   ======================================================== */
+
+:root {
+    /* 하늘 & 자연 파스텔 팔레트 */
+    --sky-top: #9fe2fb;
+    --sky-mid: #ccefff;
+    --sky-bottom: #eef9ff;
+    --ground-warm: #fff9f2;
+
+    /* 핀터레스트 절벽 & 잔디 컬러 */
+    --cliff-base: #f69d4d;
+    --cliff-dark: #e48232;
+    --cliff-light: #fbc27b;
+    --grass-mint: #38d6b7;
+    --grass-deep: #10b981;
+    --grass-tuft: #0d9488;
+
+    /* 카드 & UI 서피스 (부드러운 크림 화이트) */
+    --bg-card: rgba(255, 255, 255, 0.96);
+    --bg-card-hover: #ffffff;
+    --border-card: #bae6fd;
+    --border-warm: #fed7aa;
+    --border-subtle: #e2e8f0;
+
+    /* 포인트 컬러 (선명한 캐주얼 게임 톤) */
+    --point-blue: #0284c7;
+    --point-cyan: #38bdf8;
+    --point-mint: #10b981;
+    --point-rose: #f43f5e;
+    --point-peach: #fb7185;
+    --point-amber: #f59e0b;
+    --point-yellow: #fbbf24;
+    --point-purple: #8b5cf6;
+
+    /* 텍스트 (높은 가독성의 다크 슬레이트) */
+    --text-main: #0f172a;
+    --text-body: #334155;
+    --text-muted: #64748b;
+    --text-light: #94a3b8;
+
+    /* 폰트: 주아체 & 프리텐다드 */
+    --font-game: "Jua", "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+    --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+
+    /* 모서리 곡률 */
+    --radius-sm: 12px;
+    --radius-md: 18px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+    --radius-full: 9999px;
+
+    /* 부드러운 파스텔 그림자 */
+    --shadow-main: 0 12px 30px rgba(56, 140, 200, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
+    --shadow-card: 0 14px 35px rgba(38, 120, 180, 0.14), 0 4px 10px rgba(0, 0, 0, 0.03);
+    --shadow-btn: 0 4px 0 #0369a1;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: var(--font-game);
+    background-color: var(--sky-top);
+    background-image: 
+        radial-gradient(circle at 10% 12%, rgba(255, 255, 255, 0.8) 0%, transparent 25%),
+        radial-gradient(circle at 90% 18%, rgba(255, 255, 255, 0.7) 0%, transparent 30%),
+        linear-gradient(180deg, #9ae2fb 0%, #c8f0fe 30%, #e2f7ff 65%, #fff9f2 100%);
+    background-attachment: fixed;
+    color: var(--text-main);
+    min-height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* 배경 FX 캔버스 */
+#fxCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 999;
+}
+
+/* ========================================================
+   전체 화면 반응형 그리드 레이아웃
+   ======================================================== */
+.app-layout {
+    width: 100%;
+    max-width: 1540px;
+    margin: 0 auto;
+    padding: 16px 20px 40px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    min-height: 100vh;
+    position: relative;
+    z-index: 10;
+}
+
+/* 모던 카드 공통 스타일 (부드러운 크림 화이트 & 산뜻한 테두리) */
+.modern-card {
+    background: var(--bg-card);
+    border: 3px solid var(--border-card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.modern-card:hover {
+    border-color: #7dd3fc;
+    box-shadow: 0 16px 40px rgba(56, 140, 200, 0.18);
+}
+
+/* ========================================================
+   1. 상단 글로벌 네비게이션 헤더
+   ======================================================== */
+.game-header {
+    background: rgba(255, 255, 255, 0.96);
+    border: 3px solid var(--border-card);
+    border-radius: var(--radius-md);
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-main);
+}
+
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.brand-logo {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #38bdf8, #0284c7);
+    border-radius: var(--radius-sm);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.7rem;
+    box-shadow: 0 4px 10px rgba(2, 132, 199, 0.3);
+    border: 2px solid #ffffff;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand-title {
+    font-size: 1.45rem;
+    font-weight: normal;
+    letter-spacing: -0.01em;
+    color: #0369a1;
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.brand-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: normal;
+    font-family: var(--font-body);
+}
+
+.header-center {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.game-clock-badge {
+    background: #f0f9ff;
+    border: 2.5px solid #7dd3fc;
+    border-radius: var(--radius-full);
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.15rem;
+    color: #0369a1;
+    box-shadow: 0 4px 10px rgba(3, 105, 161, 0.12);
+}
+
+.clock-icon {
+    font-size: 1.25rem;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.control-btn {
+    background: #ffffff;
+    border: 2px solid #cbd5e1;
+    border-bottom: 4px solid #94a3b8;
+    color: var(--text-body);
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-family: var(--font-game);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s ease;
+}
+
+.control-btn:hover {
+    background: #f8fafc;
+    border-color: #94a3b8;
+    transform: translateY(-2px);
+}
+
+.control-btn:active {
+    transform: translateY(2px);
+    border-bottom-width: 2px;
+}
+
+.control-btn.danger {
+    color: #e11d48;
+    border-color: #fecdd3;
+    border-bottom-color: #f43f5e;
+}
+
+.control-btn.danger:hover {
+    background: #fff1f2;
+}
+
+/* ========================================================
+   2. 메인 대시보드 그리드 레이아웃
+   ======================================================== */
+.game-main-content {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+/* [좌측 사이드바] */
+.dashboard-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* 프로필 카드 */
+.profile-card {
+    padding: 20px;
+    background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 100%);
+}
+
+.profile-avatar-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.avatar-frame {
+    position: relative;
+    width: 72px;
+    height: 72px;
+    flex-shrink: 0;
+}
+
+.avatar-portrait {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #e0f2fe;
+    border: 3px solid #38bdf8;
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+}
+
+.rank-stars {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    background: #f59e0b;
+    border: 2px solid #ffffff;
+    color: #ffffff;
+    font-size: 0.75rem;
+    padding: 2px 7px;
+    border-radius: var(--radius-full);
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.profile-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.job-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.job-badge {
+    background: #0284c7;
+    color: #ffffff;
+    font-size: 0.95rem;
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.3);
+}
+
+.career-title-sub {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-family: var(--font-body);
+}
+
+.salary-display {
+    display: flex;
+    flex-direction: column;
+    margin-top: 4px;
+}
+
+.salary-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-family: var(--font-body);
+}
+
+.salary-amount {
+    font-size: 1.35rem;
+    color: #0369a1;
+}
+
+/* 주거 일러스트 카드 */
+.housing-visual-card {
+    padding: 18px;
+    background: #ffffff;
+}
+
+.housing-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.badge-sub {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-family: var(--font-body);
+}
+
+.housing-tag {
+    background: #fef3c7;
+    border: 1.5px solid #fbbf24;
+    color: #92400e;
+    font-size: 0.88rem;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+}
+
+.housing-graphic-container {
+    width: 100%;
+    height: 120px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    margin-bottom: 10px;
+}
+
+.housing-meta-info {
+    font-size: 0.85rem;
+    color: var(--text-body);
+    font-family: var(--font-body);
+    text-align: center;
+}
+
+/* 자산 포트폴리오 카드 */
+.finance-card {
+    padding: 20px;
+    background: #ffffff;
+}
+
+.finance-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 14px;
+}
+
+.section-title {
+    font-size: 1.15rem;
+    color: var(--text-main);
+}
+
+.total-asset-text {
+    font-size: 1.55rem;
+    color: #0284c7;
+}
+
+.asset-chips-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.asset-chip {
+    padding: 10px 8px;
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    border: 2px solid transparent;
+}
+
+.asset-chip.cash {
+    background: #fefce8;
+    border-color: #fef08a;
+    color: #854d0e;
+}
+
+.asset-chip.savings {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #166534;
+}
+
+.asset-chip.stocks {
+    background: #f0f9ff;
+    border-color: #bae6fd;
+    color: #0369a1;
+}
+
+.chip-top {
+    font-size: 0.78rem;
+    font-family: var(--font-body);
+}
+
+.chip-val {
+    font-size: 1.05rem;
+}
+
+/* 3억 내 집 마련 목표 마일스톤 */
+.goal-milestone-box {
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: var(--radius-md);
+    padding: 14px;
+}
+
+.milestone-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.goal-label {
+    font-size: 0.95rem;
+    color: var(--text-body);
+}
+
+.goal-pct {
+    font-size: 1.1rem;
+    color: #e11d48;
+}
+
+.milestone-track {
+    width: 100%;
+    height: 14px;
+    background: #e2e8f0;
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 10px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.milestone-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #38bdf8, #34d399);
+    border-radius: var(--radius-full);
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.bar-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, transparent 60%);
+}
+
+.milestone-steps {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    color: var(--text-light);
+    font-family: var(--font-body);
+}
+
+.m-node.reached {
+    color: #059669;
+    font-weight: bold;
+}
+
+/* 3대 라이프 지표 카드 */
+.vitals-card {
+    padding: 20px;
+    background: #ffffff;
+}
+
+.vitals-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 12px;
+}
+
+.vital-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.vital-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+}
+
+.vital-name {
+    color: var(--text-body);
+}
+
+.vital-val {
+    color: var(--text-main);
+}
+
+.vital-track {
+    width: 100%;
+    height: 12px;
+    background: #e2e8f0;
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.vital-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    transition: width 0.4s ease;
+    position: relative;
+}
+
+.vital-fill::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: var(--radius-full);
+}
+
+.fill-mental {
+    background: linear-gradient(90deg, #f43f5e, #fb7185);
+}
+
+.fill-perf {
+    background: linear-gradient(90deg, #f59e0b, #fbbf24);
+}
+
+.fill-rep {
+    background: linear-gradient(90deg, #10b981, #34d399);
+}
+
+.warning-pulse {
+    animation: pulseWarn 1.2s infinite;
+}
+
+@keyframes pulseWarn {
+    0%, 100% { border-color: #fecdd3; box-shadow: 0 0 12px rgba(244, 63, 94, 0.2); }
+    50% { border-color: #f43f5e; box-shadow: 0 0 20px rgba(244, 63, 94, 0.4); }
+}
+
+/* ========================================================
+   [우측 메인 아레나]
+   ======================================================== */
+.game-play-area {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* 8단계 턴 인디케이터 (상단 네비게이션) */
+.phase-stepper-container {
+    padding: 14px 20px;
+    background: rgba(255, 255, 255, 0.96);
+}
+
+.phase-stepper {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    gap: 8px;
+}
+
+.phase-stepper::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    right: 20px;
+    height: 4px;
+    background: #e2e8f0;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.step-pill {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #ffffff;
+    border: 2px solid #cbd5e1;
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.step-num {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.step-pill.active {
+    background: #0284c7;
+    border-color: #0284c7;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+    transform: translateY(-2px);
+}
+
+.step-pill.active .step-num {
+    background: #ffffff;
+    color: #0284c7;
+}
+
+.step-pill.completed {
+    background: #f0fdf4;
+    border-color: #86efac;
+    color: #166534;
+}
+
+.step-pill.completed .step-num {
+    background: #22c55e;
+    color: #ffffff;
+}
+
+/* 메인 플레이 액션 카드 */
+.action-card {
+    min-height: 520px;
+    padding: 32px;
+    background: #ffffff;
+    border: 3.5px solid var(--border-card);
+    display: flex;
+    flex-direction: column;
+}
+
+.card-title-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.card-step-badge {
+    background: #0284c7;
+    color: #ffffff;
+    font-size: 0.95rem;
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    box-shadow: 0 3px 8px rgba(2, 132, 199, 0.3);
+}
+
+.card-title {
+    font-size: 1.6rem;
+    color: #0f172a;
+}
+
+.card-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    font-family: var(--font-body);
+}
+
+/* 공통 3D 캐주얼 게임 버튼 스타일 */
+.game-btn, .btn-primary-large, .btn-next-action, .btn-secondary-modern {
+    font-family: var(--font-game);
+    font-size: 1.15rem;
+    padding: 14px 28px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    border: none;
+    transition: all 0.12s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    user-select: none;
+}
+
+.btn-primary-large, .btn-next-action {
+    background: #0284c7;
+    border-bottom: 5px solid #0369a1;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
+}
+
+.btn-primary-large:hover, .btn-next-action:hover {
+    background: #0369a1;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(2, 132, 199, 0.4);
+}
+
+.btn-primary-large:active, .btn-next-action:active {
+    transform: translateY(3px);
+    border-bottom-width: 2px;
+    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.2);
+}
+
+.btn-success-modern {
+    background: #10b981;
+    border-bottom: 5px solid #047857;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+
+.btn-success-modern:hover {
+    background: #059669;
+    transform: translateY(-2px);
+}
+
+.btn-success-modern:active {
+    transform: translateY(3px);
+    border-bottom-width: 2px;
+}
+
+.btn-danger-modern {
+    background: #f97316;
+    border-bottom: 5px solid #c2410c;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(249, 115, 22, 0.3);
+}
+
+.btn-danger-modern:hover {
+    background: #ea580c;
+    transform: translateY(-2px);
+}
+
+.btn-danger-modern:active {
+    transform: translateY(3px);
+    border-bottom-width: 2px;
+}
+
+.btn-secondary-modern {
+    background: #f1f5f9;
+    border: 2px solid #cbd5e1;
+    border-bottom: 4px solid #94a3b8;
+    color: var(--text-body);
+}
+
+.btn-secondary-modern:hover {
+    background: #e2e8f0;
+    transform: translateY(-2px);
+}
+
+.btn-secondary-modern:active {
+    transform: translateY(2px);
+    border-bottom-width: 2px;
+}
+
+/* ========================================================
+   [1단계] 월급 입금 화면
+   ======================================================== */
+.paystub-card {
+    background: #f8fafc;
+    border: 2.5px solid #e2e8f0;
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    max-width: 620px;
+    margin: 20px auto;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+}
+
+.paystub-header {
+    text-align: center;
+    border-bottom: 2px dashed #cbd5e1;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+}
+
+.paystub-title {
+    font-size: 1.4rem;
+    color: #0369a1;
+}
+
+.paystub-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-family: var(--font-body);
+}
+
+.paystub-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.05rem;
+    color: var(--text-body);
+}
+
+.paystub-row.total {
+    border-top: 2px solid #cbd5e1;
+    padding-top: 14px;
+    margin-top: 6px;
+    font-size: 1.35rem;
+    font-weight: bold;
+    color: #0284c7;
+    font-family: var(--font-game);
+}
+
+/* ========================================================
+   [2단계] 미니게임 (세금 회피 & 행운 줍기) 아레나
+   ======================================================== */
+.canvas-wrapper {
+    position: relative;
+    width: 100%;
+    height: 420px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: #9fe2fb;
+    border: 3.5px solid #7dd3fc;
+    box-shadow: 0 8px 24px rgba(3, 105, 161, 0.15);
+    margin: 10px 0;
+}
+
+#taxCanvas, #stockCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.canvas-overlay-ui {
+    position: absolute;
+    top: 16px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.dodge-timer {
+    background: #ffffff;
+    border: 2.5px solid #0284c7;
+    border-radius: var(--radius-full);
+    padding: 6px 18px;
+    font-size: 1.15rem;
+    color: #0284c7;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.dodge-hits {
+    background: #ffffff;
+    border: 2.5px solid #f43f5e;
+    border-radius: var(--radius-full);
+    padding: 6px 18px;
+    font-size: 1.15rem;
+    color: #e11d48;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.dodge-lucky {
+    background: #ffffff;
+    border: 2.5px solid #10b981;
+    border-radius: var(--radius-full);
+    padding: 6px 18px;
+    font-size: 1.15rem;
+    color: #059669;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.mobile-dodge-controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.btn-ctrl {
+    background: #ffffff;
+    border: 2.5px solid #cbd5e1;
+    border-bottom: 5px solid #94a3b8;
+    font-size: 1.5rem;
+    padding: 12px 36px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+}
+
+/* ========================================================
+   [3단계] 고정 지출 & 소비 모드
+   ======================================================== */
+.expense-list {
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: var(--radius-md);
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    font-family: var(--font-body);
+}
+
+.expense-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1rem;
+    color: var(--text-body);
+}
+
+.expense-val {
+    font-weight: bold;
+    color: #e11d48;
+}
+
+.lifestyle-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 16px 0;
+}
+
+.lifestyle-card {
+    background: #ffffff;
+    border: 3px solid #e2e8f0;
+    border-radius: var(--radius-md);
+    padding: 18px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.lifestyle-card:hover {
+    border-color: #38bdf8;
+    transform: translateY(-3px);
+}
+
+.lifestyle-card.selected {
+    background: #f0f9ff !important;
+    border-color: #0284c7 !important;
+    border-width: 3.5px !important;
+    box-shadow: 0 8px 24px rgba(2, 132, 199, 0.25) !important;
+    transform: translateY(-3px) !important;
+    position: relative;
+}
+
+.lifestyle-card.selected::after {
+    content: "✓ 선택됨";
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    background: #0284c7;
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-family: var(--font-game);
+    padding: 2px 10px;
+    border-radius: var(--radius-full);
+}
+
+.career-card.selected {
+    background: #f0f9ff !important;
+    border-color: #0284c7 !important;
+    border-width: 3.5px !important;
+    box-shadow: 0 10px 28px rgba(2, 132, 199, 0.28) !important;
+    transform: translateY(-4px) !important;
+    position: relative;
+}
+
+.career-card.selected::after {
+    content: "✓ 선택됨";
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    background: #0284c7;
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-family: var(--font-game);
+    padding: 3px 12px;
+    border-radius: var(--radius-full);
+    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.35);
+}
+
+/* ========================================================
+   [4단계] 커리어 선택 & 연봉 협상
+   ======================================================== */
+.career-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin: 20px 0;
+}
+
+.career-card {
+    background: #ffffff;
+    border: 3px solid #e2e8f0;
+    border-radius: var(--radius-lg);
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.career-card:hover {
+    border-color: #38bdf8;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(56, 189, 248, 0.2);
+}
+
+.career-icon {
+    font-size: 2.8rem;
+}
+
+.career-name {
+    font-size: 1.3rem;
+    color: #0f172a;
+}
+
+.career-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-family: var(--font-body);
+}
+
+.career-effects {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.career-effects .pos { color: #059669; }
+.career-effects .neg { color: #e11d48; }
+
+/* 대화형 연봉 협상 박스 */
+.dialogue-box {
+    background: #f8fafc;
+    border: 2.5px solid #cbd5e1;
+    border-radius: var(--radius-lg);
+    padding: 22px;
+    margin: 16px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.dialogue-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.choice-btn {
+    background: #ffffff;
+    border: 2px solid #bae6fd;
+    border-bottom: 4px solid #7dd3fc;
+    padding: 12px 18px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-family: var(--font-game);
+    font-size: 1.05rem;
+    text-align: left;
+    transition: all 0.15s ease;
+}
+
+.choice-btn:hover {
+    background: #f0f9ff;
+    border-color: #0284c7;
+    transform: translateY(-2px);
+}
+
+.choice-btn:active {
+    transform: translateY(2px);
+    border-bottom-width: 2px;
+}
+
+/* ========================================================
+   [5단계] 자금 배분 슬라이더
+   ======================================================== */
+.allocation-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 20px 0;
+}
+
+.alloc-row {
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.alloc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.alloc-amount {
+    font-size: 1.35rem;
+    color: #0284c7;
+}
+
+.alloc-slider {
+    width: 100%;
+    height: 10px;
+    accent-color: #0284c7;
+    cursor: pointer;
+}
+
+/* ========================================================
+   [6단계] 주식 공격 라운드
+   ======================================================== */
+.stock-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.stock-btn {
+    flex: 1;
+    background: #f8fafc;
+    border: 2px solid #cbd5e1;
+    border-bottom: 4px solid #94a3b8;
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-family: var(--font-game);
+    font-size: 1.05rem;
+    color: var(--text-body);
+    transition: all 0.15s ease;
+}
+
+.stock-btn.active {
+    background: #0284c7;
+    border-color: #0284c7;
+    border-bottom-color: #0369a1;
+    color: #ffffff;
+}
+
+.current-price-badge {
+    background: #ffffff;
+    border: 2.5px solid #0284c7;
+    border-radius: var(--radius-full);
+    padding: 6px 20px;
+    font-size: 1.25rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.current-price-badge.pos { color: #dc2626; border-color: #ef4444; }
+.current-price-badge.neg { color: #2563eb; border-color: #3b82f6; }
+
+.stock-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: 14px;
+}
+
+/* ========================================================
+   [7단계] 월말 이벤트
+   ======================================================== */
+.event-card-body {
+    background: #f8fafc;
+    border: 3px solid #e2e8f0;
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    text-align: center;
+    max-width: 650px;
+    margin: 20px auto;
+}
+
+.event-icon-large {
+    font-size: 4rem;
+    margin-bottom: 12px;
+}
+
+.event-headline {
+    font-size: 1.6rem;
+    color: #0f172a;
+    margin-bottom: 10px;
+}
+
+.event-story {
+    font-size: 1.05rem;
+    color: var(--text-body);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* ========================================================
+   [8단계] 정산 및 로드맵
+   ======================================================== */
+.settlement-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-family: var(--font-body);
+}
+
+.settle-row {
+    border-bottom: 1.5px solid #e2e8f0;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.05rem;
+}
+
+.settle-row.highlight {
+    background: #f0f9ff;
+    border-radius: var(--radius-sm);
+    font-weight: bold;
+    color: #0284c7;
+    font-size: 1.25rem;
+    font-family: var(--font-game);
+}
+
+/* ========================================================
+   모달 다이얼로그 (엔딩 & 도움말)
+   ======================================================== */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.ending-dialog, .guide-dialog {
+    background: #ffffff;
+    border: 4px solid var(--border-card);
+    border-radius: var(--radius-xl);
+    padding: 36px;
+    max-width: 680px;
+    width: 100%;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+    animation: popModal 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popModal {
+    from { transform: scale(0.85); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.ending-badge-pill {
+    background: #fef3c7;
+    border: 2px solid #f59e0b;
+    color: #b45309;
+    padding: 6px 18px;
+    border-radius: var(--radius-full);
+    font-size: 1rem;
+    display: inline-block;
+    margin-bottom: 12px;
+}
+
+.ending-hero-icon {
+    font-size: 4.5rem;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.ending-headline {
+    font-size: 2rem;
+    color: #0f172a;
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.ending-story-box {
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: var(--radius-md);
+    padding: 18px;
+    font-size: 1.05rem;
+    color: var(--text-body);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.ending-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.stat-box {
+    background: #f0f9ff;
+    border: 2px solid #bae6fd;
+    border-radius: var(--radius-md);
+    padding: 12px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stat-name {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-family: var(--font-body);
+}
+
+.stat-number {
+    font-size: 1.3rem;
+    color: #0369a1;
+}
+
+/* 도움말 다이얼로그 */
+.dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 16px;
+    margin-bottom: 18px;
+}
+
+.dialog-title {
+    font-size: 1.45rem;
+    color: #0369a1;
+}
+
+.close-x-btn {
+    background: #f1f5f9;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-x-btn:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+.guide-scrollable-body {
+    max-height: 480px;
+    overflow-y: auto;
+    padding-right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    font-family: var(--font-body);
+}
+
+.guide-item h4 {
+    font-family: var(--font-game);
+    font-size: 1.15rem;
+    color: #0284c7;
+    margin-bottom: 6px;
+}
+
+.guide-item p, .guide-item ul {
+    font-size: 0.95rem;
+    color: var(--text-body);
+    line-height: 1.6;
+}
+
+.guide-item ul {
+    padding-left: 20px;
+}
+
+/* ========================================================
+   미디어 쿼리 (태블릿 & 모바일 반응형)
+   ======================================================== */
+@media (max-width: 1080px) {
+    .game-main-content {
+        grid-template-columns: 1fr;
+    }
+    .phase-stepper {
+        overflow-x: auto;
+        padding-bottom: 8px;
+    }
+}
+
+@media (max-width: 640px) {
+    .game-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+    .header-actions {
+        justify-content: space-between;
+    }
+    .lifestyle-cards, .career-options {
+        grid-template-columns: 1fr;
+    }
+    .canvas-wrapper {
+        height: 360px;
+    }
+}
+
+button:disabled, .game-btn:disabled, .control-btn:disabled {
+    opacity: 0.45 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    box-shadow: none !important;
+    filter: grayscale(40%) !important;
+    pointer-events: none !important;
+}
+
+.canvas-wrapper.stock-chart-wrapper {
+    height: 320px;
+    background: #ffffff;
+    border: 3.5px solid #7dd3fc;
+}
+
+.stock-timer-badge {
+    background: #ffffff;
+    border: 2.5px solid #0284c7;
+    border-radius: var(--radius-full);
+    padding: 6px 18px;
+    font-size: 1.15rem;
+    font-family: var(--font-game);
+    color: #0f172a;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.stock-timer-badge b {
+    color: #0f172a;
+    font-weight: 900;
+}
